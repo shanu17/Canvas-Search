@@ -13,7 +13,6 @@ router.post("/search", (req, res) => {
 	if (token) {
 		let url = "https://canvas.pitt.edu/api/v1/users/self/profile?access_token=" + token;
 		request.get(url, { json: true }, (error, response, body) => {
-			console.log(response);
 			if(error)
 				return res.status(404).send("Error accessing Canvas user");
 			if(response.statusCode == 200) {
@@ -37,18 +36,26 @@ router.post("/search", (req, res) => {
 									if(moduleList.length > 0) {
 										for(let j in moduleList) {
 											let itemsUrl = moduleList[j].items_url + "?access_token=" + token;
-											request.get(itemsUrl, {json: true}, (error, response, body) => {
+											request.get(itemsUrl, {json: true}, async (error, response, body) => {
 												if(error)
 													return res.status(404).send("Error accessing Module Items");
 												let itemsList = body;
 												for(let k in itemsList) {
 													if(itemsList[k].title.includes(".pdf") || itemsList[k].title.includes(".ppt")) {
 														let fileUrl = itemsList[k].url + "?access_token=" + token;
+														await new Promise(r => setTimeout(r, 200));
 														request.get(fileUrl, {json: true}, (error, response, body) => {
 															if(error)
 																return res.status(404).send("Error accessing files in Module Items");
 															let files = body;
-															
+															let downloadPath = userDir + "/" + files.filename;
+															if(!fs.existsSync(downloadPath)) {
+																console.log("inside if");
+																request.get(files.url).on("error", (err) => {
+																	console.log(err);
+																}).pipe(fs.createWriteStream(downloadPath));
+															}
+
 														});
 													}
 												}
@@ -69,7 +76,13 @@ router.post("/search", (req, res) => {
 			}
 		});
 	} else {
-		res.render("/");
+		res.redirect("/");
 	}
+});
+
+router.get("/search", (req, res) => {
+	let query = req.query.searchQuery;
+	console.log(query);
+	res.send("We got the query");
 });
 module.exports = router;
