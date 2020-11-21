@@ -1,15 +1,17 @@
 const express = require("express");
 const request = require("request");
 const fs = require('fs');
+var cors = require('cors');
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", cors(),(req, res) => {
 	res.render("index");
 });
 
-router.post("/search", (req, res) => {
+router.post("/search", cors(), (req, res) => {
 	const {token} = req.body;
+	var userDir;
 	if (token) {
 		let url = "https://canvas.pitt.edu/api/v1/users/self/profile?access_token=" + token;
 		request.get(url, { json: true }, (error, response, body) => {
@@ -17,7 +19,7 @@ router.post("/search", (req, res) => {
 				return res.status(404).send("Error accessing Canvas user");
 			if(response.statusCode == 200) {
 				let userProfile = body;
-				let userDir = "./" + userProfile.id;
+				userDir = "./" + userProfile.id;
 				if(!fs.existsSync(userDir))
 					fs.mkdirSync(userDir);
 				let courseUrl = "https://canvas.pitt.edu/api/v1/users/self/courses?access_token=" + token;
@@ -55,7 +57,6 @@ router.post("/search", (req, res) => {
 																	console.log(err);
 																}).pipe(fs.createWriteStream(downloadPath));
 															}
-
 														});
 													}
 												}
@@ -66,7 +67,7 @@ router.post("/search", (req, res) => {
 								return res.status(404).send("Error cannot retrieve Modules for Course " + courseList[i].name);
 							});
 						}
-						return res.render("search");
+						res.render("search", {user: userProfile.id});
 					} else {
 						return res.status(404).send("Error cannot retrieve Courses for User ID" + userProfile.id);
 					}
@@ -74,6 +75,8 @@ router.post("/search", (req, res) => {
 			} else {
 				return res.status(404).send("Error Invalid Canvas user");
 			}
+			console.log(userDir); // U can access the userDir created here 
+			// Do all the python script stuff for indexing here by using this
 		});
 	} else {
 		res.redirect("/");
@@ -82,7 +85,10 @@ router.post("/search", (req, res) => {
 
 router.get("/search", (req, res) => {
 	let query = req.query.searchQuery;
-	console.log(query);
-	res.send("We got the query");
+	let userId = req.query.userId;
+	// The userId here will give you which folder to actually use to search for the query
+	// Use that and then after that send a JSON object containing the top results
+	res.status(200).send({q: query});
 });
+
 module.exports = router;

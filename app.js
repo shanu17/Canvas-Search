@@ -1,8 +1,10 @@
 const express = require("express");
 const port = 3000;
 const path = require('path');
+var cors = require('cors');
 
 const app = express();
+app.use(cors());
 
 //Template Manager EJS
 app.set("view engine", "ejs");
