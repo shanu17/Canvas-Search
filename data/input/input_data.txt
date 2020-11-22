@@ -1,0 +1,119 @@
+<START_TAG>
+Assignment 1: Document Collection Processing
+Instruction
+
+The goal of the assignment is to develop Java classes that can process TREC standard format document collections. You need to follow the instructions to implement the required classes for processing the document collection files.
+
+In information retrieval (IR) experiments, a document is usually the basic unit to be indexed and retrieved, such as a webpage or a pure text file. To simply the processing of documents, we usually compile small document files into large collection files. Each single collection file contains the contents of many small documents. trectext and trecweb are two popular document collection formats. In this assignment, we need to write programs to process documents stored in these two types of collections.
+
+The trectext format is widely used to store textual documents such as news articles. Figure 1 shows a sample snippet of a trectext format collection file: each document starts with <DOC> and ends with </DOC>; <DOCNO> stores the unique identifier of each document; <TEXT> stores the main content of the document.
+
+The trecweb format is used to store web documents. Figure 2 shows a sample snippet of a trecweb format collection file: each document starts with <DOC> and ends with </DOC>; <DOCNO> stores the unique identifier of each document; <DOCHDR> usually stores the http response header information of accessing the web document; the content of the web document is stored between </DOCHDR> and </DOC>.
+
+
+Figure 1: A sample snippet of a trectext format collection file.
+
+
+Figure 2: A sample snippet of a trecweb format collection file.
+
+
+Tasks
+Task 1: Reading Documents from Collection Files
+In this task, you should implement two classes that can read individual documents from trectext and trecweb format collection files (you can find the classes and detailed descriptions in src.zip):
+PreProcessData.DocumentCollection is a general interface for sequentially reading documents from collection files
+PreProcessData.TrectextCollection is the class for trectext format
+PreProcessData.TrecwebCollection is the class for trecweb format
+Task 2: Normalize Document Texts
+In this task, you should first implement classes to tokenize document texts into individual words, normalize all the words into their lowercase characters, and finally filter stop words.
+PreProcessData.TextTokenizer is a class for sequentially reading words from a sequence of characters
+PreProcessData.TextNormalizer is the class that transform each word to its lowercase version, and conduct stemming on each word. 
+PreProcessData.StopwordsRemover is the class that can recognize whether a word is a stop word or not. A stop word list file will be provided, so that the class should take the stop word list file as input.
+
+The 6 classes to be implemented in task1 & 2 can be found in src.zip. You CANNOT change the classes’ names or the required methods’ names. However, you can add new variables, constants, and methods in these classes and create new classes if necessary. 
+
+HW1Main is the main class for running your assignment 1. You can find the class in src.zip, and you are NOT allowed to change anything in this file. If you have successfully implemented the 6 classes in task 1&2, you should be able to directly run HW1Main, which can read an input collection file and output the normalized version of each document in the collection as another file. 
+
+Classes.Path contains addresses of all input and output files, so you should put all files in the corresponding directory. Classes.Stemmer is the stemmer that you will use to normalize each word, and you can learn how to use this stemmer through its main method. These two classes are NOT allowed to change, too.
+
+
+Figure 3: Download the collection files.
+
+Two collection files and stopword.txt are provided in http://crystal.exp.sis.pitt.edu:8080/iris/resource.jsp , as shown in Figure 3. docset.trectext is a trectext format file and docset.trecweb is a trecweb format one. Your programs should at least be able to successfully process these two documents.
+
+Requirements and Reminders
+
+You CAN ONLY use Java or Python to finish this assignment.
+You CANNOT use any Java API library other than the standard JDK (for example, you cannot use apache commons, apache Lucene, indri etc. in this assignment).
+Feel free to use IDE tools such as Eclipse and Netbeans.
+Do tell us the Java version you used for writing your assignment, e.g. JDK 1.6 or 1.7. Please only use Oracle JDK or openjdk.
+
+Grading
+
+Your submission will be graded based on:
+Correctness of the implementation on the required functions (70%)
+Efficiency of your implementation, make sure your code finish processing two collections within 15 minutes (20%)
+Necessary program annotation and commentaries (10%)
+
+Submission Requirements
+A zipped file package with the naming convention as “pittids_2140a1”. For example, suppose the Pitt id is jud1, then the submission package should be jud1_2140a1.zip.
+The file package should contain:
+All the scripts/programs you used for this assignment (src folder)
+A short instruction on how to read your scripts and how to run your scripts, including environment configuration. (This should be a txt file.)
+A short instruction on how long it takes to finish running your code, and how many documents of two corpus are processed. You will NOT upload your result file, so make sure your code finish running within 15 minutes; if cannot, you must make it clear whether the code will generate the result, and how much time it costs to finish running. (This should be a txt file.)
+</START_TAG>
+<START_TAG>
+Assignment 2: Collection Index Construction
+Instruction
+
+The goal of the assignment is to develop practical understanding of constructing searchable index for a document collection, which is specified as a set of classes. The students can take advantage of the outcomes of their assignment 1 (the pre-processed corpus) as the starting point of this assignment. However, you may use the pre-processed corpus we provided (see below).   You need to follow the instructions to implement the required classes.
+
+The collection index is based on the inverted file structure discussed in the class. Usually, it has at least the following two components:
+Dictionary term file. This file should contain all the index terms, their collection frequency (i.e., how many times this term appear in the whole collection), and a pointer to their corresponding posting information in the posting file.
+Posting file. This file should contain the corresponding pointer that can link entries in dictionary term file to that in the posting file. This file also includes a repeated set of information that indicates the document id that the term is in, the term frequency (i.e., how many time this term appears in this document), and other information you may want to put into the postings.
+
+Besides, in indexing procedure, you need to assign the integer docid to each document, and your index structure should be able to transform string docno into integer docids, which is necessary for later search process (your Assignment 3).
+
+Tasks
+Task 1: Build an index.
+In this task, you should implement:
+Indexing. PreProcessedCorpusReader
+You will need to get access to the result.trectext and result.trecweb, and return document one by one through the nextDocument(). Reference HW1Main class in assignment 1 for the format of the document. If you do not want to use your own result.trectext and result.trecweb, you can DOWNLOAD the versions we provide to you from http://crystal.exp.sis.pitt.edu:8080/iris/resource.jsp .
+Indexing.MyIndexWriter
+This class has one essential method IndexADocument (String docno, String content) to create index for a document represented by the docno and the content. The content is a list of words, segmented by blank space generated in the Assignment 1. You will need to write very efficient code in this class, otherwise your memory may fail to support your code.  If your computer have a memory smaller than 8G, we strongly suggest you to construct the index by installments, where each installment works on only a block of the documents to be indexed. For example, each block can have n document (n can be 10000, 20000, etc). When processing the documents in a block, everything about the index can be stored in the memory, then when all the documents in the block is processed, the corresponding dictionary and postings can be stored as separate files on the hard drive so that the memory is cleaned for the next block of documents. Once all the blocks have been processed, there will be a fusion process to merge all the dictionary files, and all the posting files. If you are not clear on this process, consult the part of the slides. In this way, small memory computer can process big corpus.
+You need to develop your own data structures used for dictionary term file and posting files. But we strongly suggest you first look at task 2 before implementing task 1, so that you can check whether your index can support search tasks in task 2.
+Task 2: Retrieve posting lists of tokens from an index 
+In this task, you should implement:
+Indexing. MyIndexReader, which has the following methods:
+MyIndexReader(): read the index file you generated in task 1. Do not load the whole index into the memory. A proper implementation should load the dictionary term file first. Once the corresponding links of the posting information of the query terms are known, you can load the relevant parts of the postings into the memory.
+int GetDocid( String docno ) and String getDocno( int docid ): provides transformation between string docnos and integer docids.
+int[][] GetPostingList( String token ): retrieve posting list of the token as a 2-dimension array (see comments in MyIndexReader for the structure of the array)
+int GetDocFreq( String token ): get the document frequency of the token.
+long GetCollectionFreq( String token ): get the collection frequency of the token.
+
+HW2Main class is the main class for running your tasks. You can find the class in src.zip, and you are NOT allowed to change anything in this file. If you have successfully implemented the classes in task 1&2, you should be able to directly run HW2Main.
+Classes.Path contains addresses of all input and output files, so you should put all files in the corresponding directory. Path.java/Path.py has been updated with two more addresses, so please replace the old one with this new one. You are NOT allowed to change anything in this file, too.
+
+The classes to be implemented can be found in src.zip. You CANNOT change the classes’ names or the required methods’ names. However, you can add new variables, constants, and methods in these classes and create new classes if necessary. 
+
+Requirements and Reminders
+
+You CAN ONLY use Java or Python to finish this assignment.
+You CANNOT use any Java API library other than the standard JDK (for example, you cannot use apache commons, apache Lucene, indri etc. in this assignment).
+Feel free to use IDE tools such as Eclipse and Netbeans, Spyder, etc.
+Do tell us the Java version you used for writing your assignment, e.g. JDK 1.6 or 1.7. Please only use Oracle JDK or openjdk.
+Use python 3 if you plan to use python to finish the assignment.
+
+Grading
+
+Your submission will be graded based on:
+Correctness of the implementation on the required functions (70%). Hint: start with result.trecweb, since it is much smaller than result.trectext.
+Efficiency of your implementation, make sure your code finish processing two collections within 5 minutes (20%). 
+Necessary comments for your codes and instructions for your invert index design (10%).
+Submission Requirements
+A zipped file packaged with the naming convention as “pittids_2140a2”. For example, suppose the CSSD id is jud1, then the submission package should be jud1_2140a2.zip.
+The file package should contain:
+src folder, which contain all your codes.
+A short instruction on how to read your scripts and how to run your scripts, including environment configuration. 
+A short instruction on how long it takes to finish running your code, and the retrieval result of token “acow” in “trecweb”, and “yhoo” in “trectext”. You will NOT upload your result file, so make sure your code finish running within 5 minutes; if cannot, you must make it clear whether the code will generate the result, and how much time it costs to finish running. 
+Please write your instruction in txt files. 
+</START_TAG>
