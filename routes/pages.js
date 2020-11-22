@@ -65,8 +65,10 @@ router.post("/search", cors(), async (req, res) => {
 							let files = body;
 							let downloadPath = userDir + "/" + files.filename;
 							if(!fs.existsSync(downloadPath)) {
-								let fileContents = axios.get(files.url);
-								await fsPromises.writeFile(downloadPath, fileContents);
+								console.log(downloadPath);
+								axios.get(files.url, {responseType: "stream"}).then((response) => {
+									response.data.pipe(fs.createWriteStream(downloadPath));
+								});
 							}
 						}
 					}
