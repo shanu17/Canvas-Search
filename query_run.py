@@ -45,6 +45,9 @@ query= extractor.getQuries()
 
 results = search.retrieveQuery(query, 4, miu, doc_to_title_dict, user)
 rank = 1
-for result in results: 
-    print(" Query:",query.getTopicId(), ", Document number:",str(result.getDocNo()),", Document name:",result.getDocName(),', Rank:',rank," ",result.getScore(),"\n")
-    rank+=1
+if len(results)==0:
+	print("No Results")
+else:
+	for result in results: 
+	    print(" Query:",query.getTopicId(), ", Document number:",str(result.getDocNo()),", Document name:",result.getDocName(),', Rank:',rank," ",result.getScore(),"\n")
+	    rank+=1

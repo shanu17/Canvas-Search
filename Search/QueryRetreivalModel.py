@@ -139,14 +139,22 @@ class QueryRetrievalModel:
             heappush(heap, item)
 
         return_list = []
-        for i in range(topN):
-            val = heappop(heap)
-            result = Document.Document()
-            result.setDocNo(self.indexReader.getDocNo(int(val[1])))
-            result.setDocName(names[int(val[1])])
-            result.setDocId(int(val[1]))
-            result.setScore(-val[0])
-            return_list.append(result)
+
+        if len(heap)==0:
+            return 0
+        else:
+            for i in range(topN):
+                try:
+                    val = heappop(heap)
+                    result = Document.Document()
+                    result.setDocNo(self.indexReader.getDocNo(int(val[1])))
+                    result.setDocName(names[int(val[1])])
+                    result.setDocId(int(val[1]))
+                    result.setScore(-val[0])
+                    return_list.append(result)
+                except Exception as e:
+                    return []
+                
 
 
         return return_list

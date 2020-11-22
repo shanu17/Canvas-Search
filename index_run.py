@@ -72,12 +72,12 @@ def PreProcess(path, user):
     count = 0
     for entry in entries:
         try:
-            file = fitz.open(path+entry)
-            doc = ""
-            for page in file:
-                text = page.getText("text")
-                doc = doc + text
-            # doc = textract.process(path+entry)
+            # file = fitz.open(path+entry)
+            # doc = ""
+            # for page in file:
+            #     text = page.getText("text")
+            #     doc = doc + text
+            doc = textract.process(path+entry).decode('utf-8')
             if doc == None:
                 break
             doc = doc.split()

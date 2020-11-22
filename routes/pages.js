@@ -58,7 +58,7 @@ router.post("/search", cors(), async (req, res) => {
 						body = response.data;
 						let itemsList = body;
 						for(let k in itemsList) {
-							if(itemsList[k].title.includes(".pdf") || itemsList[k].title.includes(".ppt")) {
+							if(itemsList[k].title.includes(".pdf") || itemsList[k].title.includes(".pptx")) {
 								let fileUrl = itemsList[k].url + "?access_token=" + token;
 								response = await axios.get(fileUrl);
 								if(response.status !== 200) {
