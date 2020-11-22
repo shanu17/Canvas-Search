@@ -8,7 +8,7 @@ class PreprocessedCorpusReader:
     	#get the path and name of file to be read
     	filename = Path.ResultHM1+'result_'+user+'.txt'
     	#open the file for reading
-    	file = open(filename, 'r')
+    	file = open(filename, 'r', encoding='cp437')
     	return
     # Read a line for docNo from the corpus, read another line for the content, and return them in [docNo, content].
     def nextDocument(self):

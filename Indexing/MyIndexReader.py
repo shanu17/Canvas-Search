@@ -11,7 +11,7 @@ class MyIndexReader:
         pre = Path.IndexDir
         postings_file = pre+"postings_"+user
         dictionary_file = pre+"dictionary_"+user
-        fd=open(dictionary_file, 'r')
+        fd=open(dictionary_file, 'r', encoding='cp437')
 
     # Return the integer DocumentID of input string DocumentNo.
     def getDocId(self, docNo):
@@ -28,7 +28,7 @@ class MyIndexReader:
         #get the path and name of file to be read
         # filename = Path.ResultHM1
         #open the file for reading
-        filee = open(Path.ResultHM1+"result_"+user+'.txt', 'r')
+        filee = open(Path.ResultHM1+"result_"+user+'.txt', 'r', encoding='cp437')
         content=0
         num_collections=0
         while True:
@@ -39,7 +39,6 @@ class MyIndexReader:
             if docId == d:
                 c = filee.readline()
                 c = c.split("\n")[0]
-                # print(c)
                 return len(c.split())
 
         return 0
@@ -49,7 +48,7 @@ class MyIndexReader:
         word_number = 0
         not_found = True
         global type_here, postings_file, dictionary_file
-        fd=open(dictionary_file, 'r')
+        fd=open(dictionary_file, 'r', encoding='cp437')
         while(not_found):
             line = fd.readline()
             if not line:
@@ -59,7 +58,7 @@ class MyIndexReader:
                 break
             word_number+=1
         fd.close()
-        fp = open(postings_file, 'r')
+        fp = open(postings_file, 'r', encoding='cp437')
         fp_count = 0
         line2 = ""
         while(True):
@@ -76,7 +75,7 @@ class MyIndexReader:
     # Return the frequency of the token in whole collection/corpus.
     def CollectionFreq(self, token):
         global type_here, postings_file, dictionary_file
-        fd=open(dictionary_file, 'r')
+        fd=open(dictionary_file, 'r', encoding='cp437')
         not_found = True
         while(not_found):
             line = fd.readline()
@@ -93,7 +92,7 @@ class MyIndexReader:
         word_number = 0
         not_found = True
         global type_here, postings_file, dictionary_file
-        fd=open(dictionary_file, 'r')
+        fd=open(dictionary_file, 'r', encoding='cp437')
         while(not_found):
             line = fd.readline()
             if not line:
@@ -104,7 +103,7 @@ class MyIndexReader:
                 break
             word_number+=1
         fd.close()
-        fp = open(postings_file, 'r')
+        fp = open(postings_file, 'r', encoding='cp437')
         fp_count = 0
         line2 = ""
         while(True):

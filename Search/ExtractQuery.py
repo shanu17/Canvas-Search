@@ -17,7 +17,7 @@ class ExtractQuery:
         stopword_list = []
 
         #opening the stopword file
-        stopword_file = open(Path.StopwordDir,'r')
+        stopword_file = open(Path.StopwordDir,'r', encoding='cp437')
 
         #reading all stopwords into a variable
         temp = stopword_file.readlines()

@@ -91,19 +91,21 @@ def PreProcess(path, user):
             doc_title = entry
             
             doc_to_title_dict[count]=doc_title
-            # Output the doctitle.
-            wr.write(str(count)+"\n")
-            dr.write(str(count)+":"+doc_title+"\n")
+
+            if len(content) !=0 :
+                # Output the doctitle.
+                wr.write(str(count)+"\n")
+                dr.write(str(count)+":"+doc_title+"\n")
 
 
-            # Output the preprocessed content.
-            for word in content:
-                word = normalizer.lowercase(word)
-                if stopwordRemover.isStopword(word) == False:
-                    wr.write(normalizer.stem(word) + " ")
-            wr.write("\n")
-            count += 1
-            print("finish " + str(count) + " docs")
+                # Output the preprocessed content.
+                for word in content:
+                    word = normalizer.lowercase(word)
+                    if stopwordRemover.isStopword(word) == False:
+                        wr.write(normalizer.stem(word) + " ")
+                wr.write("\n")
+                count += 1
+                print("finish " + str(count) + " docs")
             pass
         except Exception as e:
             print("document " + str(count) + " has error") 

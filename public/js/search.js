@@ -27,13 +27,18 @@ searchForm.addEventListener("submit", (e) => {
 	var req;
 	req = new XMLHttpRequest();
 	req.responseType = "json";
-	req.onreadystatechange = function() {
-		if(this.readyState == 4 && this.status == 200) {
-			console.log(this.response.q);
-			searchForm.reset();
-		}
-	}
+
 	let url = "http://localhost:3000/search?searchQuery=" + q + "&userId=" + userId;
 	req.open("GET", url, true);
 	req.send();
+
+	req.onreadystatechange = function() {
+		if(this.readyState == 4 && this.status == 200) {
+			// console.log(this.response.q);
+			console.log("hello")
+			// searchForm.reset();
+			// document.getElementById("results_display").innerHTML = this.response.result
+			
+		}
+	}
 });

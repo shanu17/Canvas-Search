@@ -25,7 +25,7 @@ names_file = Path.FilesDictDir+'dict_'+user+'.txt'
 dict_file =  Path.IndexDir+"dictionary_"+user
 postings_file = Path.IndexDir+"postings_"+user
 
-dr = open(names_file, "r", encoding="utf8")
+dr = open(names_file, "r", encoding='cp437')
 while True:
     l = dr.readline()
     if not l:
@@ -49,5 +49,10 @@ if len(results)==0:
 	print("No Results")
 else:
 	for result in results: 
-	    print(" Query:",query.getTopicId(), ", Document number:",str(result.getDocNo()),", Document name:",result.getDocName(),', Rank:',rank," ",result.getScore(),"\n")
+	    print("[Query:",str(query.getTopicId())+"]")
+	    print("[Document number:"+str(result.getDocNo())+"]")
+	    print("[Document name:"+str(result.getDocName().split("\n")[0])+"]")
+	    print("[Rank:"+str(rank)+"]")
+	    print("[Score:"+str(result.getScore())+"]")
 	    rank+=1
+

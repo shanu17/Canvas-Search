@@ -10,7 +10,7 @@ class Collection_reader:
         #global file pointer of the text type input file with pointer repeatedly accessed in next function.
         global file, id_counter
         id_counter = 0
-        file = open(Path.DataDir, 'r')
+        file = open(Path.DataDir, 'r', encoding='cp437')
                      
     def nextDocument(self):
 

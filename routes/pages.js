@@ -11,7 +11,7 @@ const router = express.Router();
 router.get("/", cors(),(req, res) => {
 	res.render("index");
 });
-
+//|| itemsList[k].title.includes(".pptx")
 router.post("/search", cors(), async (req, res) => {
 	const {token} = req.body;
 	var userDir;
@@ -58,7 +58,7 @@ router.post("/search", cors(), async (req, res) => {
 						body = response.data;
 						let itemsList = body;
 						for(let k in itemsList) {
-							if(itemsList[k].title.includes(".pdf") || itemsList[k].title.includes(".pptx")) {
+							if(itemsList[k].title.includes(".pdf")) {
 								let fileUrl = itemsList[k].url + "?access_token=" + token;
 								response = await axios.get(fileUrl);
 								if(response.status !== 200) {
@@ -123,7 +123,7 @@ router.get("/search", (req, res) => {
           // result is an array consisting of messages collected  
           //during execution of script. 
           console.log('result: ', result.toString()); 
-          res.status(200).send({q: query});
+          res.status(200).send({q: query, result:result.toString()});
     });
 	// The userId here will give you which folder to actually use to search for the query
 	// Use that and then after that send a JSON object containing the top results

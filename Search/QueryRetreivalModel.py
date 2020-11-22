@@ -20,7 +20,7 @@ class QueryRetrievalModel:
         #get the path and name of file to be read
         filename = Path.ResultHM1+"result_"+user+'.txt'
         #open the file for reading
-        file_again = open(filename, 'r')
+        file_again = open(filename, 'r', encoding='cp437')
         content=0
         num_collections=0
         while True:
