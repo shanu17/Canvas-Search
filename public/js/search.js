@@ -31,13 +31,21 @@ searchForm.addEventListener("submit", (e) => {
 	let url = "http://localhost:3000/search?searchQuery=" + q + "&userId=" + userId;
 	req.open("GET", url, true);
 	req.send();
-
+	userId = document.getElementById("userId").innerText.trim();
 	req.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 200) {
 			// console.log(this.response.q);
-			console.log("hello")
-			// searchForm.reset();
-			// document.getElementById("results_display").innerHTML = this.response.result
+			// console.log("hello")
+			// console.log(this.response.result)
+			division = document.getElementById("results_display");
+			division.innerHTML=""
+			for  (var x in this.response.result) {
+				division.innerHTML += "<a href=\""+userId+"/"+this.response.result[x].docname+"\">"+this.response.result[x].docname+"</a>"
+				// console.log(this.response.result[x].docname)
+			}
+			searchForm.reset();
+			// division = document.getElementById("results_display");
+
 			
 		}
 	}

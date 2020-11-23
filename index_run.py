@@ -64,20 +64,21 @@ def PreProcess(path, user):
     # Initialize essential objects.
     stopwordRemover = StopWordRemover.StopWordRemover()
     normalizer = WordNormalizer.WordNormalizer()
-    wr = open(Path.ResultHM1+'result_'+user+'.txt', "w", encoding="utf8")
-    dr = open(Path.FilesDictDir+'dict_'+user+'.txt', "w", encoding="utf8")
+    wr = open(Path.ResultHM1+'result_'+user+'.txt', "w", encoding="utf-8")
+    dr = open(Path.FilesDictDir+'dict_'+user+'.txt', "w", encoding="utf-8")
     doc = []
     
     #Process the corpus, document by document, iteratively.
     count = 0
     for entry in entries:
         try:
-            # file = fitz.open(path+entry)
-            # doc = ""
-            # for page in file:
-            #     text = page.getText("text")
-            #     doc = doc + text
-            doc = textract.process(path+entry).decode('utf-8')
+            file = fitz.open(path+entry)
+            doc = ""
+            for page in file:
+                text = page.getText("text")
+                doc = doc + text
+
+            # doc = textract.process(path+entry).decode('utf-8')
             if doc == None:
                 break
             doc = doc.split()
@@ -91,8 +92,8 @@ def PreProcess(path, user):
             doc_title = entry
             
             doc_to_title_dict[count]=doc_title
-
-            if len(content) !=0 :
+            # print("entry:"+str(entry)+", length"+str(len(content)))
+            if len(content) > 50 :
                 # Output the doctitle.
                 wr.write(str(count)+"\n")
                 dr.write(str(count)+":"+doc_title+"\n")
@@ -115,8 +116,9 @@ def PreProcess(path, user):
 
 def run_search():
     #fetching the arguments from command line
-    user = sys.argv[1]
-    file_folder_path = './'+user+'/'
+    user_f = sys.argv[1]
+    user = sys.argv[1].split("/")[1]
+    file_folder_path = './'+user_f+'/'
     processed_file = Path.ResultHM1+'result_'+user+'.txt'
     names_file = Path.FilesDictDir+'dict_'+user+'.txt'
     dict_file =  Path.IndexDir+"dictionary_"+user

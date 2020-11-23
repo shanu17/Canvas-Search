@@ -18,7 +18,7 @@ app.use(express.static(publicDirectory));
 //Enable us to use POST data
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
-
+// app.use(express.static(__dirname + 'public'));
 //Define Routes
 app.use("/", require("./routes/pages"));
 

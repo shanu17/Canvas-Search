@@ -27,7 +27,7 @@ router.post("/search", cors(), async (req, res) => {
 		}
 		let body = response.data
 		let userProfile = body;
-		userDir = "./" + userProfile.id;
+		userDir = "./public/" + userProfile.id;
 		if (fs.existsSync(userDir)) {
 			console.log("already fetched user")
 		} else{
@@ -93,7 +93,7 @@ router.get("/generate", (req, res) => {
 		mode: 'text', 
 		pythonOptions: ['-u'], // get print results in real-time
 		//If you are having python_test.py script in same folder, then it's optional. 
-		args: [req.query.path] //An argument which can be accessed in the script using sys.argv[1] 
+		args: ['public/'+req.query.path] //An argument which can be accessed in the script using sys.argv[1] 
 	}; 
 		
 
@@ -123,7 +123,9 @@ router.get("/search", (req, res) => {
           // result is an array consisting of messages collected  
           //during execution of script. 
           console.log('result: ', result.toString()); 
-          res.status(200).send({q: query, result:result.toString()});
+          let r = JSON.parse(result)
+          console.log(r)
+          res.status(200).send({q: query, result:r});
     });
 	// The userId here will give you which folder to actually use to search for the query
 	// Use that and then after that send a JSON object containing the top results

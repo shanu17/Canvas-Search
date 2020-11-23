@@ -14,6 +14,7 @@ import sys
 import textract
 import os
 import string
+import json
 
 miu = 2000
 doc_to_title_dict = {}
@@ -45,14 +46,21 @@ query= extractor.getQuries()
 
 results = search.retrieveQuery(query, 4, miu, doc_to_title_dict, user)
 rank = 1
+
+final_json = []
 if len(results)==0:
 	print("No Results")
 else:
 	for result in results: 
-	    print("[Query:",str(query.getTopicId())+"]")
-	    print("[Document number:"+str(result.getDocNo())+"]")
-	    print("[Document name:"+str(result.getDocName().split("\n")[0])+"]")
-	    print("[Rank:"+str(rank)+"]")
-	    print("[Score:"+str(result.getScore())+"]")
-	    rank+=1
+		item = {}
+		item['query'] = query.getTopicId()
+		item['docno'] = result.getDocNo()
+		item['docname'] = result.getDocName().split("\n")[0]
+		item['rank'] = rank
+		item['score'] = result.getScore()
+		rank+=1
+		final_json.append(item)
 
+jsonData=json.dumps(final_json)
+
+print(jsonData)
