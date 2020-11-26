@@ -77,7 +77,6 @@ class QueryRetrievalModel:
             if len(token_posting) == 0:
                 faulty_tokens.append(token)
                 tokens_not_found +=1
-                print(token, "not found in any document")
 
 
             else:

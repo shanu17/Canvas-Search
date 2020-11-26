@@ -49,7 +49,7 @@ rank = 1
 
 final_json = []
 if len(results)==0:
-	print("No Results")
+	print("[]")
 else:
 	for result in results: 
 		item = {}
@@ -60,7 +60,5 @@ else:
 		item['score'] = result.getScore()
 		rank+=1
 		final_json.append(item)
-
-jsonData=json.dumps(final_json)
-
-print(jsonData)
+	jsonData=json.dumps(final_json)
+	print(jsonData)

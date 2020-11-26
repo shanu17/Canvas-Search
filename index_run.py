@@ -14,8 +14,12 @@ import sys
 import textract
 import os
 import string
-
+# from pdfreader import SimplePDFViewer
+import PyPDF2
 import fitz
+import textract
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 # # option parser added by Om
 # from optparse import OptionParser
 
@@ -72,26 +76,44 @@ def PreProcess(path, user):
     count = 0
     for entry in entries:
         try:
-            file = fitz.open(path+entry)
-            doc = ""
-            for page in file:
-                text = page.getText("text")
-                doc = doc + text
+            # file = fitz.open(path+entry)
+            # doc = ""
+            # for page in file:
+            #     text = page.getText("text")
+            #     doc = doc + text
 
-            # doc = textract.process(path+entry).decode('utf-8')
-            if doc == None:
-                break
-            doc = doc.split()
+            # # doc = textract.process(path+entry).decode('utf-8')
+            # if doc == None:
+            #     break
+            # doc = doc.split()
+
+            # fd = open(entry, "rb")
+            # viewer = SimplePDFViewer(fd)
+            # viewer.render()
+            # doc = viewer.canvas.strings
+
+
+            doc = ""
+            pdfFileObj = open(path+entry, 'rb') 
+            pdfReader = PyPDF2.PdfFileReader(pdfFileObj) 
+            for page in range(pdfReader.numPages):
+                pageObj = pdfReader.getPage(page)
+                doc += pageObj.extractText()
             # print(doc)
+            tokens = word_tokenize(doc)
+            # doc = doc_text.split()
             # print(doc)
-            remove_list = ['\x97']
-            pdf = [i for i in doc if i != '\x97']
+            punctuations = ['(',')',';',':','[',']',',']
+            keywords = [word for word in tokens if not word in punctuations]
+            # remove_list = ['\x97']
+            # pdf = [i for i in doc if i != '\x97']
 
             table = str.maketrans('', '', string.punctuation)
-            content = [w.translate(table) for w in pdf]
+            content = [w.translate(table) for w in keywords]
             doc_title = entry
             
             doc_to_title_dict[count]=doc_title
+
             # print("entry:"+str(entry)+", length"+str(len(content)))
             if len(content) > 50 :
                 # Output the doctitle.
