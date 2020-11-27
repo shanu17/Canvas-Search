@@ -24,7 +24,7 @@ class MyIndexWriter:
         pre = Path.IndexDir
         postings_filename = pre+"postings_"+user
         dictionary_filename = pre+"dictionary_"+user
-        f=open(postings_filename, 'w')
+        f=open(postings_filename, 'w',encoding="utf-8")
         
         #steps to iterate over the postings list, generate a string format to write it to file.
         for term in postings:
@@ -37,7 +37,7 @@ class MyIndexWriter:
             
         f.close()
         #steps to write the dictionary list to file
-        f2 = open(dictionary_filename,'w')
+        f2 = open(dictionary_filename,'w',encoding="utf-8")
         for term in dictionary:
             f2.write(str(term)+':'+str(dictionary[term])+'\n')
         f2.close()
