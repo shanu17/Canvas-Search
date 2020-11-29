@@ -11,7 +11,6 @@ import Classes.Query as Query
 import Search.QueryRetreivalModel as QueryRetreivalModel
 import Search.ExtractQuery as ExtractQuery
 import sys
-import textract
 import os
 import string
 import json

@@ -1,5 +1,4 @@
 import Classes.Path as Path
-import gc
 import re
 # Efficiency and memory cost should be paid with extra attention.
 global type_global

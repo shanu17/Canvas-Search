@@ -11,13 +11,10 @@ import Classes.Query as Query
 import Search.QueryRetreivalModel as QueryRetreivalModel
 import Search.ExtractQuery as ExtractQuery
 import sys
-import textract
 import os
 import string
 # from pdfreader import SimplePDFViewer
 import PyPDF2
-import fitz
-import textract
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 # # option parser added by Om
